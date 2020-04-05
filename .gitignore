@@ -2,3 +2,5 @@
 
 IMDB_Database/bin/
 IMDB_Database/obj/
+
+QueryResults/*.txt

@@ -16,6 +16,25 @@ otherwise download the SqlLocalDB utility directly from [Microsoft](https://docs
   
 4. This last command will show the 'Instance pipe name', we will need this later.
   
+
+4.5. By default the server will shut down after 10 minutes of inactivity.
+If you do not want this, run the following commands:
+```
+sqlcmd -S <Instance pipe name>
+sp_configure 'show advanced options', 1;
+GO
+
+RECONFIGURE;
+GO
+
+sp_configure 'user instance timeout', 1000;
+GO
+
+RECONFIGURE;
+GO
+EXIT
+```
+  
 ## Running the program
 The program will run SQL queries on the existing database.
 
