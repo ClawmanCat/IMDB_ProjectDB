@@ -12,9 +12,13 @@ namespace IMDB_Database {
     public static class DBUtils {
         public const string SQL_FILE_FOLDER = "../../../SQL/";
 
+        private static Dictionary<string, string> Macros = new Dictionary<string, string> {
+            { "%SolutionDir%", Path.GetFullPath("../../../") }
+        };
+
 
         public static SqlConnection GetConnection(string connstr) {
-            SqlConnection conn = new SqlConnection("Server=" + connstr);
+            SqlConnection conn = new SqlConnection("Server=" + connstr + ";MultipleActiveResultSets=True;");
             conn.Open();
 
             return conn;
@@ -23,14 +27,26 @@ namespace IMDB_Database {
 
         public static SqlDataReader RunSQLFile(SqlConnection conn, string file) {
             string sql = File.ReadAllText(Path.IsPathRooted(file) ?  file : Path.Combine(SQL_FILE_FOLDER, file));
+            return RunSQL(conn, sql, file);
+        }
+
+
+        public static SqlDataReader RunSQL(SqlConnection conn, string sql, string owner = null) {
+            if (owner != null) Console.WriteLine("Running queries from file " + owner);
+            else Console.WriteLine("Running query " + sql);
+
+            foreach (var (k, v) in Macros) sql = sql.Replace(k, v);
 
             SqlCommand command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
 
             try {
                 SqlDataReader reader = command.ExecuteReader();
                 return reader;
             } catch (SqlException e) {
-                Console.WriteLine("Failed to parse SQL file " + file + ": ");
+                if (owner != null) Console.WriteLine("Failed to parse SQL file " + owner + ": ");
+                else Console.WriteLine("Failed to parse SQL query " + sql + ": ");
+
                 Console.WriteLine("Error at line " + e.LineNumber.ToString() + ": " + e.Message);
 
                 return null;

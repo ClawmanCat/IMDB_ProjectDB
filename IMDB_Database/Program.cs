@@ -13,9 +13,9 @@ namespace IMDB_Database {
 
         public static void Main(string[] args) {
             // Example args, make sure to use your actual connection string.
-            args = args.Append(@"--connstr=""np:\\.\pipe\LOCALDB#B4BF025E\tsql\query""").ToArray();
-            args = args.Append(@"--sql=setup_db.sql").ToArray();
+            args = args.Append(@"--sql=read_csv_appearance.sql").ToArray();
             args = args.Append(@"--outmode=file").ToArray();
+            args = args.Append(@"--direct").ToArray();
 
 
             foreach (string arg in args) {
@@ -24,10 +24,24 @@ namespace IMDB_Database {
             }
 
 
-            // Run scripts provided by console args.
-            if (HasArgument("sql") && HasArgument("connstr")) {
-                SqlConnection connection = DBUtils.GetConnection(GetArgument("connstr"));
+            if (!HasArgument("connstr")) IMDB_Database.args.Add("connstr", @"(LocalDb)\IMDB_Project");
+            SqlConnection connection = DBUtils.GetConnection(GetArgument("connstr"));
 
+
+            if (HasArgument("direct")) {
+                string input;
+
+                Console.WriteLine("Direct mode is enabled. You may now write SQL queries.");
+                do {
+                    input = Console.ReadLine();
+
+                    var result = DBUtils.RunSQL(connection, input);
+                    if (result == null) continue;
+
+                    DBUtils.PrintResults(result, StringUtils.ConsoleStream);
+                } while (input.ToLower() != "exit");
+
+            } else if (HasArgument("sql")) {
                 foreach (string s in GetArgument("sql").Split(',')) {
                     var result = DBUtils.RunSQLFile(connection, s);
                     if (result == null) continue;

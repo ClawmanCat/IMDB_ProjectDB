@@ -17,7 +17,8 @@ otherwise download the SqlLocalDB utility directly from [Microsoft](https://docs
 4. This last command will show the 'Instance pipe name', we will need this later.
   
 
-4.5. By default the server will shut down after 10 minutes of inactivity.
+4.5. By default the server will shut down after 10 minutes of inactivity,
+and queries will time out after 600 seconds.
 If you do not want this, run the following commands:
 ```
 sqlcmd -S <Instance pipe name>
@@ -27,11 +28,17 @@ GO
 RECONFIGURE;
 GO
 
-sp_configure 'user instance timeout', 1000;
+sp_configure 'user instance timeout', 60000;
 GO
 
 RECONFIGURE;
 GO
+
+sp_configure 'remote query timeout', 0;
+GO
+
+RECONFIGURE;
+
 EXIT
 ```
   
@@ -39,8 +46,13 @@ EXIT
 The program will run SQL queries on the existing database.
 
 `--connstr=<URL>`  
-Provide the connection string (the Instance pipe name) for the database.                      
+Provide the connection string (the Instance pipe name) for the database.
+Default is `(LocalDb)\IMDB_Project`                     
 `--sql=<FILE1,FILE2,...>`  
 Comma seperated list of SQL files to run                                                      
 `--outdir=<DIRECTORY>`  
-Directory to store the query results. If none is provided, results are printed to the console.
+Directory to store the query results. If none is provided, results are printed to the console.  
+`--outmode=<file|console>`  
+Where to print the results of the query to. The default is console.
+`--direct`  
+Run queries directly from the console instead of using a SQL file. Implies `--outmode=console`.

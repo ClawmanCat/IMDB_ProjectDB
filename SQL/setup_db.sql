@@ -1,7 +1,7 @@
 -- This seems to work 50% of the time, I don't know why, sometimes it just keeps checking the constraint anyway.
-EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
-EXEC sp_MSForEachTable 'DROP TABLE ?'
-EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'
+EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
+EXEC sp_MSForEachTable 'DROP TABLE IF EXISTS ?'
+EXEC sp_MSForEachTable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL';
 
 
 CREATE TABLE Actor(
