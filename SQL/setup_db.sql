@@ -78,7 +78,7 @@ CREATE TABLE MovieGenre(
 CREATE TABLE MovieLanguage(
 	MovieID INT NOT NULL,
 	Language NVARCHAR(255) NOT NULL,
-	Details NVARCHAR(255) NOT NULL,
+	Details NVARCHAR(255),
 	PRIMARY KEY (MovieID, Language),
 	FOREIGN KEY (MovieID) REFERENCES Movie(MovieID)
 );
@@ -96,9 +96,9 @@ CREATE TABLE MovieLocation(
 
 CREATE TABLE MovieRating(
 	MovieID INT NOT NULL,
-	ScoreDistribution CHAR(10) NOT NULL,
+	ScoreDistribution CHAR(10) NOT NULL CHECK (ScoreDistribution IN ('N', 'A', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')),
 	Votes INT NOT NULL,
-	Score INT NOT NULL,
+	Score INT NOT NULL CHECK (Score BETWEEN 0 AND 100),
 	PRIMARY KEY (MovieID),
 	FOREIGN KEY (MovieID) REFERENCES Movie(MovieID)
 );

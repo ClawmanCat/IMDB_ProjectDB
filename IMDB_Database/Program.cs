@@ -13,7 +13,7 @@ namespace IMDB_Database {
 
         public static void Main(string[] args) {
             // Example args, make sure to use your actual connection string.
-            args = args.Append(@"--sql=read_csv_appearance.sql").ToArray();
+            args = args.Append(@"--sql=read_csv_location.sql,read_csv_lifespan.sql").ToArray();
             args = args.Append(@"--outmode=file").ToArray();
             args = args.Append(@"--direct").ToArray();
 
