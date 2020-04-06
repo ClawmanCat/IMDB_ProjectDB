@@ -1,9 +1,8 @@
 SELECT TOP 20
-  A.Fullname AS ActorName,
-  (MAX(M.ReleaseYr) - MIN(M.ReleaseYr)) AS CarreerLength
+	A.Fullname AS Name,
+	MAX(M.ReleaseYr) - MIN(M.ReleaseYr) AS Career
 FROM ActorAppearance AP
-  INNER JOIN Actor A ON A.ActorID = AP.ActorID
-  INNER JOIN Movie M ON M.MovieID = AP.MovieID
-WHERE M.MediaType = 'MOVIE'
+	INNER JOIN Movie M ON AP.MovieID = M.MovieID
+	INNER JOIN Actor A ON AP.ActorID = A.ActorID
 GROUP BY A.Fullname
-ORDER BY CarreerLength DESC;
+ORDER BY Career DESC

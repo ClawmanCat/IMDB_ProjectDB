@@ -4,4 +4,4 @@ SELECT
 FROM 
     Actor A INNER JOIN ActorAppearance AP ON A.ActorID = AP.ActorID
 GROUP BY LEFT(A.Lastname, 1)
-ORDER BY AvgPosition DESC;
+ORDER BY A.Lastname DESC;

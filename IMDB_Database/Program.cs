@@ -13,7 +13,7 @@ namespace IMDB_Database {
 
         public static void Main(string[] args) {
             // Example args, make sure to use your actual connection string.
-            args = args.Append(@"--sql=project_question_5a.sql,project_question_5b.sql,project_question_5c.sql").ToArray();
+            args = args.Append(@"--sql=project_question_3.sql").ToArray();
             args = args.Append(@"--outmode=file").ToArray();
             //args = args.Append(@"--direct").ToArray();
 
